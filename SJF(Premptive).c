@@ -3,6 +3,8 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#define MAX 50
 struct Process {
         int arrivalTime; //AT
         int processName; // Process Name
@@ -10,6 +12,7 @@ struct Process {
         int completionTime; // CT
         int waitingTime; //WT
         int turnAroundTime;//TAT
+        int remainingTime;
 };
 
 int cmpfunc(const void*a, const void *b){
@@ -18,10 +21,47 @@ int cmpfunc(const void*a, const void *b){
         return (p1->requireTime - p2->requireTime);
 }
 
+/*
+    Implementing Queue Data Structure for the code
+*/
+
+struct Process queue_array[MAX];
+int rear = - 1;
+int front = - 1;
+
+void EnQueue(struct Process add_item)
+{
+    if (rear == MAX - 1)
+    printf("Queue Overflow \n");
+    else
+    {
+        if (front == - 1)
+        /*If queue is initially empty */
+        front = 0;
+        rear = rear + 1;
+        queue_array[rear] = add_item;
+    }
+} /*End of insert()*/
+
+void deQueue()
+{
+    if (front == - 1 || front > rear)
+    {
+        printf("Queue Underflow \n");
+        return ;
+    }
+    else
+    {
+        front = front + 1;
+    }
+} /*End of delete() */
+
 int main() {
 
 int executionTime = 0;
-int processNumber,i;
+int sumBurstTime = 0;
+int elapsedTime = 0;
+int processNumber,i,timeQuantum;
 
 printf("/*\n\tAuthor:Aditya Shaha <15BCE0227>\n*/\n\n\n");
 
@@ -39,6 +79,9 @@ for(i=0;i<processNumber;i++) {
         scanf("%d",&ProcessInput[i].requireTime);
 };
 
+printf("Enter then time Quantum(TQ)\n");
+scanf("%d",&timeQuantum);
+
 for(i=0;i<processNumber;i++){
         printf("Process Name : P%d",ProcessInput[i].processName);
         printf("\n");
@@ -54,22 +97,26 @@ printf("\n");
 printf("\n");
 printf("\n");
 
-printf("Process Name\tArrival Time\tBurstTime\tCompletionTime\tTurnAround\tWaitTime");
-printf("\n");
 for(i=0;i<processNumber;i++){
-
-    if(ProcessInput[i].arrivalTime > executionTime) {
-        executionTime += (ProcessInput[i].arrivalTime - executionTime);
-    }
-
-    ProcessInput[i].completionTime = ProcessInput[i].requireTime + executionTime;
-    ProcessInput[i].turnAroundTime = ProcessInput[i].completionTime - ProcessInput[i].arrivalTime;
-    ProcessInput[i].waitingTime = ProcessInput[i].turnAroundTime - ProcessInput[i].requireTime;
-    executionTime +=ProcessInput[i].requireTime;
+    sumBurstTime += ProcessInput[i].requireTime;
+    ProcessInput[i].remainingTime = ProcessInput[i].requireTime;
 };
 
 for(i=0;i<processNumber;i++){
-    printf("P%d\t\t %d\t\t %d\t\t\t %d\t %d\t\t %d\n",ProcessInput[i].processName,ProcessInput[i].arrivalTime,ProcessInput[i].requireTime,ProcessInput[i].completionTime,ProcessInput[i].turnAroundTime,ProcessInput[i].waitingTime);
+        printf("Process Name : P%d",ProcessInput[i].processName);
+        printf("\n");
+        printf("Arrival Time: %d",ProcessInput[i].arrivalTime);
+        printf("\n");
+        printf("Required Time: %d",ProcessInput[i].requireTime);
+        printf("\n");
 };
+
+if(ProcessInput[0].arrivalTime/timeQuantum !=0) {
+    elapsedTime = ceil(ProcessInput[0].arrivalTime/timeQuantum);
+    elapsedTime*=timeQuantum;
+}
+// Queuing the first Process
+EnQueue(ProcessInput[0]);
+printf("\n %d \n",queue_array[0].processName);
 return 0;
 }

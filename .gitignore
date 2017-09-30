@@ -2,3 +2,8 @@
 SJF
 Priority
 *.exe
+*.pdf
+*.docx
+*.docx#
+*.png
+Executables

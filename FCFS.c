@@ -1,3 +1,6 @@
+/*
+    Author:Aditya Shaha <15BCE0227>
+*/
 #include <stdio.h>
 #include <stdlib.h>
 struct Process {
@@ -19,6 +22,8 @@ int main() {
 
 int executionTime = 0;
 int processNumber,i;
+
+printf("/*\n\tAuthor:Aditya Shaha <15BCE0227>\n*/\n\n\n");
 
 printf("Enter then number of processes\n");
 scanf("%d",&processNumber);
